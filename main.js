@@ -1,4 +1,4 @@
-/* LonMusics Web 0.2 | Static, free-tier friendly, no tracking or server secrets. */
+/* LonMusics Web 0.2.1 | Static, free-tier friendly, no tracking or server secrets. */
 'use strict';
 const ICONS = {
   house:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/>',
@@ -15,6 +15,8 @@ const ICONS = {
   menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
   'arrow-left':'<path d="m14 5-7 7 7 7M7 12h14"/>',
   'arrow-right':'<path d="m10 5 7 7-7 7M17 12H3"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/>',
+  moon:'<path d="M20.5 14a8.5 8.5 0 0 1-10.5-10.5A8.6 8.6 0 1 0 20.5 14z"/>',
   'sun-moon':'<path d="M12 3a6 6 0 0 0 9 7 9 9 0 1 1-9-7zM18 2v4m-2-2h4"/>',
   play:'<path d="m8 5 11 7-11 7z"/>',
   pause:'<path d="M7 5h4v14H7zM15 5h4v14h-4z"/>',
@@ -76,11 +78,28 @@ const state = {
 };
 for(const val of Object.values(state.savedTracks)) if(val&&val.id)state.tracks.set(val.id,val);
 const nativeTheme = window.matchMedia('(prefers-color-scheme: dark)');
+const THEME_NAMES={system:'Hệ thống',light:'Sáng',dark:'Tối'};
+function closeThemeMenu(){
+ const panel=document.getElementById('themeMenu');
+ if(panel)panel.hidden=true;
+ document.getElementById('themeMobileToggle')?.setAttribute('aria-expanded','false');
+}
 function applyTheme(){
  const setting=state.theme==='system'?(nativeTheme.matches?'dark':'light'):state.theme;
  document.documentElement.dataset.theme=setting;
  document.documentElement.style.colorScheme=setting;
- document.querySelector('[data-action="theme"]')?.setAttribute('title',`Giao diện: ${state.theme==='system'?'Theo hệ thống':state.theme==='dark'?'Tối':'Sáng'}`);
+ document.querySelectorAll('[data-action="set-theme"]').forEach(btn=>{
+  const active=btn.dataset.theme===state.theme;
+  btn.classList.toggle('is-selected',active);
+  btn.setAttribute('aria-pressed',String(active));
+ });
+ const label=THEME_NAMES[state.theme]||'Hệ thống';
+ const mobileLabel=document.getElementById('themeModeText');
+ if(mobileLabel)mobileLabel.textContent=label;
+ const mobileIcon=document.getElementById('themeMobileIcon');
+ if(mobileIcon)mobileIcon.innerHTML=icon(state.theme==='light'?'sun':state.theme==='dark'?'moon':'sun-moon');
+ const toggle=document.getElementById('themeMobileToggle');
+ if(toggle)toggle.title=`Giao diện: ${label}${state.theme==='system'?' (macOS đang '+(setting==='dark'?'Tối':'Sáng')+')':''}`;
 }
 function putIcons(root=document){root.querySelectorAll('[data-icon]').forEach(el=>{const k=el.getAttribute('data-icon');el.innerHTML=icon(k)});}
 function toast(message){const el=document.createElement('div');el.className='toast';el.textContent=message;document.getElementById('toasts').append(el);setTimeout(()=>el.remove(),4200)}
@@ -407,7 +426,6 @@ async function loadLyrics(t){if(lyricsAbort)lyricsAbort.abort();lyricsAbort=new 
 function closeModal(){elements.modal.innerHTML=''}
 function modal(content){elements.modal.innerHTML=`<div class="modal-cover" id="modalBackdrop"><div class="modal" role="dialog" aria-modal="true">${content}</div></div>`;elements.modal.querySelector('input')?.focus()}
 function settingsModal(){modal(`<div class="modal-heading"><div><span class="eyebrow">PERSONALIZE</span><h2>Cài đặt LonMusics</h2></div><button class="icon-btn" data-action="close-modal" aria-label="Đóng">${icon('x')}</button></div>
- <div class="field-label">Giao diện</div><div class="radio-row">${['system','light','dark'].map(t=>`<button data-action="set-theme" data-theme="${t}" class="${state.theme===t?'is-selected':''}">${t==='system'?'Theo macOS':t==='light'?'Sáng':'Tối'}</button>`).join('')}</div>
  <label class="field-label" for="apiKeyInput">Audius API Key (không bắt buộc)</label><input id="apiKeyInput" class="field-control" type="text" value="${escapeHTML(state.apiKey)}" autocomplete="off" spellcheck="false" placeholder="Để trống nếu API công khai đang hoạt động">
  <p class="small-help">Dùng public key tại <a href="https://api.audius.co/plans" target="_blank" rel="noopener noreferrer">Audius Developer</a>. Không nhập API Secret hoặc mật khẩu.</p>
  <label class="field-label" for="youtubeKeyInput">YouTube Data API Key (để tìm kiếm YouTube)</label><input id="youtubeKeyInput" class="field-control" type="text" value="${escapeHTML(state.youtubeKey)}" autocomplete="off" spellcheck="false" placeholder="AIza… (key công khai, không phải OAuth token)">
@@ -461,9 +479,9 @@ async function handleAction(action,node){const id=node.dataset.id;
  case 'back':showView(state.history.pop()||'home',false);break;
  case 'open-menu':document.getElementById('sidebar').classList.add('is-open');document.getElementById('scrim').hidden=false;break;
  case 'close-menu':closeMenu();break;
- case 'theme':state.theme=state.theme==='system'?'light':state.theme==='light'?'dark':'system';safeSet(KEY+'theme',state.theme);applyTheme();toast(`Giao diện: ${state.theme==='system'?'Theo macOS':state.theme==='light'?'Sáng':'Tối'}`);break;
+ case 'theme-menu':{const panel=document.getElementById('themeMenu');if(!panel)return;panel.hidden=!panel.hidden;node.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)panel.querySelector('[aria-pressed="true"]')?.focus();break;}
  case 'settings':settingsModal();break;
- case 'set-theme':state.theme=node.dataset.theme;safeSet(KEY+'theme',state.theme);applyTheme();settingsModal();break;
+ case 'set-theme':{if(!THEME_NAMES[node.dataset.theme])return;state.theme=node.dataset.theme;safeSet(KEY+'theme',state.theme);applyTheme();closeThemeMenu();break;}
  case 'save-settings':state.apiKey=document.getElementById('apiKeyInput')?.value.trim()||'';state.youtubeKey=document.getElementById('youtubeKeyInput')?.value.trim()||'';safeSet(KEY+'apiKey',state.apiKey);safeSet(KEY+'ytKey',state.youtubeKey);closeModal();toast('Đã lưu cài đặt API');fetchTrending();if(state.query&&state.view==='search')searchMusic(state.query);break;
  case 'reload':fetchTrending();break;
  case 'import':elements.upload.click();break;
@@ -505,13 +523,14 @@ async function handleAction(action,node){const id=node.dataset.id;
 }
 // Event delegation for static and dynamically rendered controls.
 document.addEventListener('click',e=>{
+ if(!e.target.closest('.theme-picker'))closeThemeMenu();
  if(e.target===document.getElementById('modalBackdrop')){closeModal();return}
  if(e.target.classList?.contains('now-overlay')){closeNowPlaying();return}
  const nav=e.target.closest('[data-view]');if(nav&&!nav.disabled){showView(nav.dataset.view);return}
  const act=e.target.closest('[data-action]');if(act&&!act.disabled){handleAction(act.dataset.action,act);return}
 });
 document.addEventListener('keydown',e=>{
- if(e.key==='Escape'){if(state.nowPlayingOpen)closeNowPlaying();closeModal();if(state.queueOpen){state.queueOpen=false;elements.queue.hidden=true}closeMenu();return}
+ if(e.key==='Escape'){closeThemeMenu();if(state.nowPlayingOpen)closeNowPlaying();closeModal();if(state.queueOpen){state.queueOpen=false;elements.queue.hidden=true}closeMenu();return}
  if(e.key==='Enter'&&e.target.matches('[role="button"][data-action="play-track"]')){e.preventDefault();playTrack(e.target.dataset.id);return}
  const typing=e.target.matches('input,textarea,select,[contenteditable="true"]');
  if(!typing&&e.key==='/'&&!e.metaKey){e.preventDefault();elements.search.focus();return}

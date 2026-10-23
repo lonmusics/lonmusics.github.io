@@ -1,4 +1,4 @@
-LONMUSICS WEB 0.2 - DANG GITHUB PAGES (0 DONG)
+LONMUSICS WEB 0.2.1 - DANG GITHUB PAGES (0 DONG)
 
 1. Mo https://github.com/lonmusics/lonmusics.github.io
 2. Bam "uploading an existing file" hoac "Add file -> Upload files".

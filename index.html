@@ -63,7 +63,19 @@
           </form>
         </div>
         <div class="top-actions">
-          <button class="icon-btn" data-action="theme" title="Đổi giao diện" aria-label="Đổi chế độ sáng tối"><span data-icon="sun-moon"></span></button>
+          <div class="theme-switch" role="group" aria-label="Chế độ giao diện">
+            <button type="button" data-action="set-theme" data-theme="system" aria-pressed="false" title="Tự đổi theo giao diện macOS"><span data-icon="sun-moon"></span><span>Hệ thống</span></button>
+            <button type="button" data-action="set-theme" data-theme="light" aria-pressed="false" title="Luôn dùng giao diện sáng"><span data-icon="sun"></span><span>Sáng</span></button>
+            <button type="button" data-action="set-theme" data-theme="dark" aria-pressed="false" title="Luôn dùng giao diện tối"><span data-icon="moon"></span><span>Tối</span></button>
+          </div>
+          <div class="theme-picker">
+            <button type="button" id="themeMobileToggle" class="theme-picker-toggle" data-action="theme-menu" aria-expanded="false" aria-controls="themeMenu" title="Chọn chế độ giao diện"><span data-icon="sun-moon" id="themeMobileIcon"></span><span id="themeModeText">Hệ thống</span><span data-icon="chevron-down"></span></button>
+            <div id="themeMenu" class="theme-menu" role="group" aria-label="Chế độ giao diện" hidden>
+              <button type="button" data-action="set-theme" data-theme="system" aria-pressed="false"><span data-icon="sun-moon"></span> Hệ thống <span class="theme-check" aria-hidden="true">✓</span></button>
+              <button type="button" data-action="set-theme" data-theme="light" aria-pressed="false"><span data-icon="sun"></span> Sáng <span class="theme-check" aria-hidden="true">✓</span></button>
+              <button type="button" data-action="set-theme" data-theme="dark" aria-pressed="false"><span data-icon="moon"></span> Tối <span class="theme-check" aria-hidden="true">✓</span></button>
+            </div>
+          </div>
           <button class="btn btn-outline top-import" data-action="import" type="button"><span data-icon="upload"></span><span>Thêm nhạc</span></button>
           <button class="avatar-btn" data-action="settings" type="button" aria-label="Cài đặt LonMusics"><img src="./assets/lonmusics-64.png" alt=""></button>
         </div>

@@ -1,4 +1,4 @@
-# LonMusics Web 0.2 · GitHub Pages
+# LonMusics Web 0.2.1 · GitHub Pages
 
 **LonSuite · Music, your way.** Trình phát web tĩnh với Noto Sans, nền theo macOS Light/Dark và vàng champagne làm điểm nhấn. Giao diện lấy cảm hứng từ Spotify / YouTube Music, không sao chép thương hiệu của các dịch vụ này.
 
@@ -23,7 +23,7 @@
 - Nhập nhạc cá nhân MP3, FLAC, WAV, ALAC/M4A, OGG... **nếu trình duyệt hỗ trợ**. File được giữ trong IndexedDB khi có quyền/dung lượng, không tải lên máy chủ.
 - Điều khiển phát/tạm dừng, kế/trước, tua, âm lượng, trộn, lặp và media keys đối với Audius/nhạc cục bộ.
 - Trình phát nguồn YouTube có nút phát/tua/âm lượng **ngay trong video**, và phải ở trạng thái hiển thị trong suốt thời gian xem/nghe.
-- Giao diện Light / Dark / Theo macOS, chạy desktop/mobile, không dùng thư viện frontend hay backend trả phí.
+- Chọn giao diện **Hệ thống / Sáng / Tối trực tiếp trên thanh trên cùng** (3 nút trên desktop, menu gọn trên màn nhỏ), không cần vào Cài đặt. Theo Hệ thống mặc định, tự theo dõi Light/Dark của macOS. Chạy desktop/mobile, không dùng thư viện frontend hay backend trả phí.
 
 ## Để tìm kiếm YouTube trong website
 
