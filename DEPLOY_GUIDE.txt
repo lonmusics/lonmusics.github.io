@@ -1,0 +1,23 @@
+LONMUSICS WEB 0.2 - DANG GITHUB PAGES (0 DONG)
+
+1. Mo https://github.com/lonmusics/lonmusics.github.io
+2. Bam "uploading an existing file" hoac "Add file -> Upload files".
+3. GIAI NEN ZIP nay, tai cac file vao goc repo:
+   index.html, main.js, styles.css, manifest.webmanifest,
+   README.md, assets/ va .nojekyll.
+4. Commit changes.
+5. Settings -> Pages -> Deploy from a branch -> main / root -> Save.
+6. Mo https://lonmusics.github.io sau khi GitHub bao deploy xong.
+
+KHONG tai nguyen ZIP len repo.
+
+NGHE YOUTUBE:
+- Dan link video/playlist YouTube: khong can API Key.
+- Tim YouTube ngay trong website: can YouTube Data API v3 Key (co the tao mien phi, gioi han theo quota). Cai dat key trong LonMusics va gioi han HTTP referrer https://lonmusics.github.io/*, khong dua key vao file repo.
+- Video luon hien thi va do player chinh thuc cua YouTube dieu khien.
+
+CO SAN: Audius, nhac tren may, playlist, thich, nhac cua toi, LonRadio,
+Now Playing, lyrics LRCLIB neu co, sang/toi macOS + font Noto Sans.
+DU LIEU cu tren Cloudflare khong tu dong sang GitHub Pages.
+
+CHI TIET: xem README.md.

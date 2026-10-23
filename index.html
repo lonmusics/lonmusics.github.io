@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f5f6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1c1e" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="LonMusics - Khám phá Audius, nhạc YouTube qua trình phát chính thức và thư viện riêng. Trình nghe nhạc miễn phí theo phong cách LonSuite.">
+  <link rel="icon" type="image/png" sizes="64x64" href="./assets/lonmusics-64.png">
+  <link rel="apple-touch-icon" href="./assets/lonmusics-256.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <title>LonMusics · Nhạc của em, gu của em</title>
+</head>
+<body>
+  <div class="app-shell" id="app">
+    <aside class="sidebar" id="sidebar" aria-label="Điều hướng">
+      <div class="brand-wrap">
+        <div class="brand-mark"><img src="./assets/lonmusics-64.png" alt=""></div>
+        <span class="brand-name">Lon<span>Musics</span></span>
+        <button class="icon-btn mobile-only sidebar-close" data-action="close-menu" aria-label="Đóng menu" type="button" data-icon="x"></button>
+      </div>
+      <div class="sidebar-rule"></div>
+      <p class="nav-caption">KHÁM PHÁ</p>
+      <nav class="nav-list">
+        <button class="nav-item is-active" type="button" data-view="home"><span data-icon="house"></span><span>Trang chủ</span></button>
+        <button class="nav-item" type="button" data-view="search"><span data-icon="search"></span><span>Tìm kiếm</span></button>
+        <button class="nav-item" type="button" data-view="trending"><span data-icon="chart"></span><span>Thịnh hành</span></button>
+        <button class="nav-item" type="button" data-view="youtube"><span data-icon="youtube"></span><span>YouTube</span></button>
+      </nav>
+      <p class="nav-caption section-gap">THƯ VIỆN</p>
+      <nav class="nav-list">
+        <button class="nav-item" type="button" data-view="library"><span data-icon="library"></span><span>Thư viện</span></button>
+        <button class="nav-item" type="button" data-view="favorites"><span data-icon="heart"></span><span>Bài hát yêu thích</span></button>
+        <button class="nav-item" type="button" data-view="local"><span data-icon="folder"></span><span>Nhạc trên máy</span></button>
+        <button class="nav-item" type="button" data-view="recent"><span data-icon="clock"></span><span>Nghe gần đây</span></button>
+      </nav>
+      <div class="playlist-head"><span>PLAYLIST CỦA EM</span><button class="icon-btn xs" type="button" data-action="new-playlist" aria-label="Tạo playlist"><span data-icon="plus"></span></button></div>
+      <nav class="nav-list custom-playlists" id="customPlaylists"></nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-action="import" type="button"><span data-icon="upload"></span><span>Thêm nhạc FLAC / MP3</span></button>
+        <button class="nav-item" data-action="settings" type="button"><span data-icon="settings"></span><span>Cài đặt</span></button>
+        <div class="connection-line"><span class="connection-dot"></span><span>Free music, made yours</span></div>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <div class="main-column">
+      <header class="topbar">
+        <div class="top-left">
+          <button class="icon-btn mobile-only" data-action="open-menu" aria-label="Mở menu" type="button"><span data-icon="menu"></span></button>
+          <span class="top-nav-icons">
+            <button class="icon-btn" data-action="back" type="button" aria-label="Quay lại"><span data-icon="arrow-left"></span></button>
+            <button class="icon-btn" data-action="home" type="button" aria-label="Trang chủ"><span data-icon="house"></span></button>
+          </span>
+          <form id="searchForm" class="search-box" role="search">
+            <span data-icon="search"></span>
+            <input id="searchInput" type="search" autocomplete="off" enterkeyhint="search" placeholder="Tìm bài hát, nghệ sĩ, playlist..." aria-label="Tìm nhạc">
+            <kbd class="search-hint">/</kbd>
+          </form>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" data-action="theme" title="Đổi giao diện" aria-label="Đổi chế độ sáng tối"><span data-icon="sun-moon"></span></button>
+          <button class="btn btn-outline top-import" data-action="import" type="button"><span data-icon="upload"></span><span>Thêm nhạc</span></button>
+          <button class="avatar-btn" data-action="settings" type="button" aria-label="Cài đặt LonMusics"><img src="./assets/lonmusics-64.png" alt=""></button>
+        </div>
+      </header>
+      <main class="main-scroll" id="mainContent" aria-live="polite"></main>
+    </div>
+
+    <aside class="queue-panel" id="queuePanel" aria-label="Hàng chờ phát nhạc" hidden>
+      <div class="queue-heading"><div><span class="eyebrow">UP NEXT</span><h2>Hàng chờ</h2></div><button class="icon-btn" data-action="queue" aria-label="Đóng hàng chờ"><span data-icon="x"></span></button></div>
+      <div class="queue-list" id="queueList"></div>
+    </aside>
+
+    <footer class="player" id="player">
+      <div class="player-track">
+        <button class="cover-small clickable-cover" id="playerCover" data-action="open-now-playing" title="Mở trình phát lớn" aria-label="Mở trình phát lớn"><span data-icon="music"></span></button>
+        <button class="track-meta clickable-track" type="button" data-action="open-now-playing" title="Mở trình phát lớn"><strong id="playerTitle">Chọn một bài hát</strong><span id="playerArtist">LonMusics • Không gian âm nhạc của em</span></button>
+        <button class="icon-btn player-heart" id="playerFavorite" data-action="favorite-current" aria-label="Yêu thích" title="Thêm vào yêu thích"><span data-icon="heart"></span></button>
+      </div>
+      <div class="player-center">
+        <div class="playback-controls">
+          <button class="icon-btn" data-action="shuffle" title="Trộn bài" aria-label="Trộn bài" id="shuffleBtn"><span data-icon="shuffle"></span></button>
+          <button class="icon-btn" data-action="previous" title="Bài trước" aria-label="Bài trước"><span data-icon="skip-back"></span></button>
+          <button class="play-main" data-action="toggle-play" id="mainPlayBtn" title="Phát hoặc tạm dừng" aria-label="Phát"><span data-icon="play"></span></button>
+          <button class="icon-btn" data-action="next" title="Bài tiếp theo" aria-label="Bài tiếp theo"><span data-icon="skip-forward"></span></button>
+          <button class="icon-btn" data-action="repeat" title="Lặp lại" aria-label="Lặp lại" id="repeatBtn"><span data-icon="repeat"></span></button>
+        </div>
+        <div class="player-timeline"><time id="currentTime">0:00</time><input id="seekBar" type="range" min="0" max="1000" value="0" aria-label="Vị trí bài hát"><time id="totalTime">0:00</time></div>
+      </div>
+      <div class="player-right">
+        <span class="quality-tag" id="qualityTag">Sẵn sàng</span>
+        <button class="icon-btn" data-action="open-now-playing" title="Đang phát / Lời bài hát" aria-label="Mở trình phát lớn"><span data-icon="expand"></span></button>
+        <button class="icon-btn queue-toggle" data-action="queue" title="Hàng chờ" aria-label="Hàng chờ"><span data-icon="list-music"></span></button>
+        <button class="icon-btn volume-icon" id="muteBtn" data-action="mute" title="Tắt tiếng" aria-label="Tắt tiếng"><span data-icon="volume"></span></button>
+        <input id="volumeSlider" type="range" min="0" max="100" value="76" aria-label="Âm lượng">
+      </div>
+    </footer>
+  </div>
+
+  <div id="nowPlayingRoot"></div>
+  <div id="modalRoot"></div>
+  <div class="toast-stack" id="toasts" role="status" aria-live="polite"></div>
+  <input type="file" id="musicUpload" multiple accept="audio/*,.flac,.alac,.wav,.aiff,.aif,.m4a,.mp3,.ogg,.opus" hidden>
+  <audio id="audioElement" preload="metadata"></audio>
+  <script src="./main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"name":"LonMusics","short_name":"LonMusics","description":"Music, your way. Part of LonSuite.","start_url":"./","scope":"./","display":"standalone","background_color":"#f1f2f4","theme_color":"#f1f2f4","icons":[{"src":"./assets/lonmusics-128.png","sizes":"128x128","type":"image/png"},{"src":"./assets/lonmusics-256.png","sizes":"256x256","type":"image/png"}]}
